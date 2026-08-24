@@ -33,7 +33,7 @@
 | M5：Skill 对照实验 | ✅ 首轮完成 | rc.7 B1/B2 受控配对已归档；rc.8 remediation 完成 12/12 tests、TypeScript、build 与 Codex `approved`，并形成首轮 scorecard |
 | M6：异常与对抗验证 | ✅ 已完成（5/5） | 禁止路径、lockfile、冲突 acceptance、baseline 阻断与 commit/push 对抗均有自动 fail-closed 证据 |
 | M7：Web Host Bridge MVP | ✅ 7/7 已完成 | 已完成 transport/client/coordinator、Workspace 分组、断线恢复、双模式 evidence、真实 Host 与 UI 无刷新可见性 smoke；`web-direct` 成为推荐入口 |
-| M8：Bridge 交付与安装 | ✅ 6/6，GitHub public | MIT、私有 evidence 归档、脱敏 snapshot、release 文档、rc.2 probe 与 tarball 安装均已验证；干净初始历史已推送 GitHub，npm 尚未发布 |
+| M8：Bridge 交付与安装 | 🟡 7/8，等待 npm 授权 | MIT、私有 evidence 归档、脱敏 snapshot、release 文档、rc.2 probe、tarball 安装与双 Node CI 均已验证；固定公开工作区已建立，npm beta 等待 account Web 授权 |
 | M9：通道效率基准 | ✅ 三轮完成 | A3 完成三轮交替顺序配对；两组均 3/3 通过并获 `approved`，已汇总 Token、耗时、patch 方差与安全/审计收益 |
 
 ## 已验证证据

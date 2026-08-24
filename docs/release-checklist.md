@@ -35,6 +35,8 @@
 - [x] GitHub Private Vulnerability Reporting 已启用。
 - [x] Repository description 已设置。
 - [x] 已添加 `dsh-plugin`、`deepseek-harness`、`codex`、`web-host` topics。
+- [x] 固定公开工作区 `<public-workspace>` 已建立，不再依赖临时 snapshot 目录。
+- [x] GitHub Actions CI 已启用；Node `22.19.0` 与 `24.19.0` 均通过 checks、release audit 与 npm tarball dry-run。
 - [ ] 明确 README：当前实现是外部 Bridge CLI，不是已由 `dsh plugin add` 管理的 Cordis plugin。
 - [ ] Issues/Discussions 是否启用由维护者决定；至少提供 bug report 所需 version、channel 与脱敏 evidence 字段。
 
@@ -53,6 +55,7 @@ npm pack --dry-run --json
 - [x] 已用全新临时目录重复 tarball 安装 smoke；两个 binary、help/version、空索引、Schema 与 Prompt 资源定位通过。
 - [x] 最终公开 snapshot 已通过 Diff、93/93 tests、release audit 与 tarball dry-run。
 - [x] 已从 `release:snapshot` 建立全新 Git history；没有推送当前开发仓库的旧 history。
+- [x] GitHub Actions run `32697968948` 在 Node `22.19.0` 与 `24.19.0` 上全部通过。
 
 ## npm beta
 
