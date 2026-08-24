@@ -66,6 +66,7 @@ A3 使用相同 base commit、任务目标、检查与 review，完成三轮 dir
 - 当前 release candidate：93/93 tests。
 - 公开候选审计：195 个候选路径，0 findings。
 - 干净 release snapshot：96 个实际文件，不包含旧 Git history、原始 evidence 或私有归档。
+- 公开 GitHub root commit：`8d56ba6921188426bb679d9684a57a6deacaae51`；远端 `main` 文件树为 96 个文件且私有路径为 0。
 - 覆盖 Runner、Codex review adapter、Web Host client/session/Workspace、compatibility probe、持久 evidence、运行索引和 package version。
 - npm tarball 与隔离安装结果见 `docs/package-installation.md`。
 

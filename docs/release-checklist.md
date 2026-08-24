@@ -11,7 +11,7 @@
 - [x] `package.json#repository`、`homepage`、`bugs` 已补充。
 - [x] 原始 evidence 与本机 Contract 采用私有归档策略；公开仓库只保留 `docs/validation-evidence-summary.md`。
 - [x] 原始文件已移动到 ignored `.private-release-archive/2026-08-24/`，没有改写不可变 evidence。
-- [ ] 公开 GitHub 仓库尚未创建或连接 remote；执行外部写入前仍需维护者单独授权。
+- [x] Public GitHub repository 已创建，并从脱敏 snapshot 推送全新 `main` 历史。
 - [ ] 正式发布前再次确认 npm package name `codex-dsh-bridge` 可用。
 
 ## 内容与安全审计
@@ -30,10 +30,11 @@
 
 ## GitHub repository
 
-- [ ] 默认分支和 branch protection 已设置。
-- [ ] 启用 GitHub Private Vulnerability Reporting。
-- [ ] 添加简洁 description 与 README topics。
-- [ ] 添加 `dsh-plugin`、`deepseek-harness`、`codex`、`web-host` topics。
+- [x] 默认分支为 `main`。
+- [ ] branch protection 策略由维护者在真实协作开始前决定。
+- [x] GitHub Private Vulnerability Reporting 已启用。
+- [x] Repository description 已设置。
+- [x] 已添加 `dsh-plugin`、`deepseek-harness`、`codex`、`web-host` topics。
 - [ ] 明确 README：当前实现是外部 Bridge CLI，不是已由 `dsh plugin add` 管理的 Cordis plugin。
 - [ ] Issues/Discussions 是否启用由维护者决定；至少提供 bug report 所需 version、channel 与脱敏 evidence 字段。
 
@@ -50,8 +51,8 @@ npm pack --dry-run --json
 - [x] 安装包内 review schema 与 executor prompt 可定位。
 - [x] release candidate 已重新运行 DSH rc.2 只读 compatibility probe：六项通过，未创建 Workspace/session、未发送 prompt。
 - [x] 已用全新临时目录重复 tarball 安装 smoke；两个 binary、help/version、空索引、Schema 与 Prompt 资源定位通过。
-- [ ] review 最终 Git diff，并由维护者确认 release contents。
-- [ ] 从 `release:snapshot` 生成的全新目录建立公开 Git history；不得直接推送当前开发仓库的旧 history。
+- [x] 最终公开 snapshot 已通过 Diff、93/93 tests、release audit 与 tarball dry-run。
+- [x] 已从 `release:snapshot` 建立全新 Git history；没有推送当前开发仓库的旧 history。
 
 ## npm beta
 

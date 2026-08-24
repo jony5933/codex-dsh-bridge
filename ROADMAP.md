@@ -33,7 +33,7 @@
 | M5：Skill 对照实验 | ✅ 首轮完成 | rc.7 B1/B2 受控配对已归档；rc.8 remediation 完成 12/12 tests、TypeScript、build 与 Codex `approved`，并形成首轮 scorecard |
 | M6：异常与对抗验证 | ✅ 已完成（5/5） | 禁止路径、lockfile、冲突 acceptance、baseline 阻断与 commit/push 对抗均有自动 fail-closed 证据 |
 | M7：Web Host Bridge MVP | ✅ 7/7 已完成 | 已完成 transport/client/coordinator、Workspace 分组、断线恢复、双模式 evidence、真实 Host 与 UI 无刷新可见性 smoke；`web-direct` 成为推荐入口 |
-| M8：Bridge 交付与安装 | ✅ 6/6 release-ready | MIT、GitHub metadata、私有 evidence 归档、脱敏公开 snapshot、release 文档、rc.2 probe 与全新 tarball 安装均已验证；尚未创建远端或发布 |
+| M8：Bridge 交付与安装 | ✅ 6/6，GitHub public | MIT、私有 evidence 归档、脱敏 snapshot、release 文档、rc.2 probe 与 tarball 安装均已验证；干净初始历史已推送 GitHub，npm 尚未发布 |
 | M9：通道效率基准 | ✅ 三轮完成 | A3 完成三轮交替顺序配对；两组均 3/3 通过并获 `approved`，已汇总 Token、耗时、patch 方差与安全/审计收益 |
 
 ## 已验证证据
@@ -355,11 +355,11 @@ M7 当前协议依据见 `docs/dsh-rc8-web-host-protocol-probe.md`，只读机�
 - 新增 `CONTRIBUTING.md`，规定开发环境、最小权限协议修改、fake Host 测试、真实 smoke 脱敏和禁止贡献者自行发布。
 - 新增 `docs/release-checklist.md` 与 `docs/release-notes-0.1.0-beta.1.md`，覆盖 GitHub repository、npm `beta` dist-tag、release gates、验证与发布后检查。
 - 新增 `docs/codex-companion-installation.md`，在 plugin 尚未生成时提供标准 CLI 调用与 Codex review 流程；未来 companion 继续保持薄层。
-- 许可证采用 MIT，copyright holder 为 `jony5933`；公开 URL 为 `https://github.com/jony5933/codex-dsh-bridge`，package metadata 已补齐。2026-08-24 只读 `git ls-remote` 返回 Repository not found，说明远端尚未创建或当前不可访问。
+- 许可证采用 MIT，copyright holder 为 `jony5933`；public repository 已创建于 `https://github.com/jony5933/codex-dsh-bridge`，package metadata 与公开 URL 一致。
 - 原始 `docs/evidence` 与本机运行 Contract 已完整移动到 ignored `.private-release-archive/2026-08-24/`，公开仓库只保留 `docs/validation-evidence-summary.md`；原始 evidence 没有被改写。
 - `pnpm run release:audit` 扫描 195 个公开候选路径并以 0 findings 通过；`release:snapshot` 已在仓库外生成 96 个实际文件的无历史快照，不包含私有归档。
 - release candidate 的 DSH rc.2 live compatibility probe 六项只读检查全部通过，未创建 Workspace/session、未发送 prompt。
-- M8 本地准备达到 6/6。下一步属于外部发布操作：从干净 snapshot 建立新 Git history、创建 GitHub repository、review/commit/push、设置 topics/security，再按授权执行 npm `beta` 发布。
+- M8 达到 6/6；干净 root commit `8d56ba6921188426bb679d9684a57a6deacaae51` 已推送 `main`，远端文件树为 96 个文件且不含私有目录。仓库 topics 已设置，Private Vulnerability Reporting 已启用。下一步只剩维护者单独授权的 npm `beta`、tag 与 GitHub Release。
 
 ## 项目价值与停止门槛
 
