@@ -33,7 +33,7 @@
 | M5：Skill 对照实验 | ✅ 首轮完成 | rc.7 B1/B2 受控配对已归档；rc.8 remediation 完成 12/12 tests、TypeScript、build 与 Codex `approved`，并形成首轮 scorecard |
 | M6：异常与对抗验证 | ✅ 已完成（5/5） | 禁止路径、lockfile、冲突 acceptance、baseline 阻断与 commit/push 对抗均有自动 fail-closed 证据 |
 | M7：Web Host Bridge MVP | ✅ 7/7 已完成 | 已完成 transport/client/coordinator、Workspace 分组、断线恢复、双模式 evidence、真实 Host 与 UI 无刷新可见性 smoke；`web-direct` 成为推荐入口 |
-| M8：Bridge 交付与安装 | 🟡 7/8，等待 npm 授权 | MIT、私有 evidence 归档、脱敏 snapshot、release 文档、rc.2 probe、tarball 安装与双 Node CI 均已验证；固定公开工作区已建立，npm beta 等待 account Web 授权 |
+| M8：Bridge 交付与安装 | ✅ 8/8，npm beta 已发布 | MIT、私有 evidence 归档、脱敏 snapshot、release 文档、rc.2 probe、双 Node CI 与 registry 安装均已验证；`0.1.0-beta.1` 已发布到 npm |
 | M9：通道效率基准 | ✅ 三轮完成 | A3 完成三轮交替顺序配对；两组均 3/3 通过并获 `approved`，已汇总 Token、耗时、patch 方差与安全/审计收益 |
 
 ## 已验证证据
@@ -271,7 +271,7 @@ M8 拆分为六个发布前阶段：
 3. ✅ **运行索引**：按 project、Workspace、session、状态和时间保存本地索引，并提供只读查询。
 4. ✅ **兼容探测**：启动前核对 DSH version 与必需 RPC/capability；未知或不兼容版本 fail closed，并保存 probe evidence。
 5. ✅ **安装与包边界**：beta 保持单包 `codex-dsh-bridge`，主要 binary 为 `codex-dsh`，保留 `deepseek-loop` 兼容 alias；DSH 作为独立前置条件。安装、升级、卸载和隔离 tarball smoke 已通过，详见 `docs/package-installation.md`。
-6. ✅ **GitHub/npm beta release-ready**：MIT、repository metadata、安全说明、贡献指南、release checklist、release notes、Codex companion 安装说明、私有 evidence 归档与干净公开 snapshot 均已完成。远端创建、commit/push、tag 和 npm publish 仍等待维护者逐项授权；真实 beta 稳定后再生成 Codex plugin scaffold。
+6. ✅ **GitHub/npm beta release**：MIT、repository metadata、安全说明、贡献指南、release checklist、release notes、Codex companion 安装说明、私有 evidence 归档与干净公开 snapshot 均已完成；GitHub public repository、CI 与 npm beta 均已上线。GitHub tag/Release 与 Codex plugin scaffold 留到 beta 观察期后决定。
 
 M7 当前协议依据见 `docs/dsh-rc8-web-host-protocol-probe.md`，只读机器证据见 `docs/validation-evidence-summary.md`。
 
@@ -345,9 +345,10 @@ M7 当前协议依据见 `docs/dsh-rc8-web-host-protocol-probe.md`，只读机�
 - 主要 binary 为 `codex-dsh`，`deepseek-loop` 作为兼容 alias；两者均指向真实构建入口 `dist/src/cli.js`。CLI 新增 `--help` 与 `--version`，version 可同时从源码和已安装 package layout 读取。
 - DSH 保持外部前置条件，不进入 dependency/peer dependency，Bridge 不自动安装 DSH，也不接管 credentials。发布后安装、更新和卸载流程已写入 `README.md` 与 `docs/package-installation.md`。
 - `package.json#files` 使用 allowlist，tarball 只包含运行时 JavaScript/type declarations、五个 schema、两个 prompt、README、MIT LICENSE 与 manifest；测试、真实 evidence、本地 Contract 和源码不会进入发布包。`prepack` 固定执行完整检查。
-- 当前 release-candidate `npm pack --dry-run --json` 通过：48,197 bytes tarball、198,449 bytes unpacked、62 个文件。真实 tarball 已安装到全新隔离目录，两个 binary 的 version、help、空索引查询、review schema 与 executor prompt 的 package 内定位均通过。
-- 2026-08-24 查询 npm registry 时 `codex-dsh-bridge` 返回 `E404`；这不是名称预留，正式发布前必须复查。当前未执行 publish、全局安装或 DSH 修改。
-- 完整自动验证为 93/93 tests。
+- 最终 tarball 为 48,194 bytes、198,445 bytes unpacked、62 个文件；SHA-512 integrity 为 `sha512-aYXDBPPGlns52ewgUsRQJuY7xxWMrxMi+tEPru2zW/Pj/R3/6R7qVvVjj2v7YraqxNktkgz+8/6uXOIRS7eYhw==`。
+- npm registry 全新安装 `codex-dsh-bridge@beta` 后，两个 binary 的 version、help 与空索引查询均通过；package 内保留两个 `bin`、review schema 与 executor prompt。
+- npm Public Registry 为新包首次发布自动创建 `latest`，即使 publish 使用 `--tag beta`，且拒绝删除唯一版本的 `latest`；文档继续要求显式安装 `@beta`，不把该 tag 解释为稳定版。
+- 完整自动验证为 94/94 tests。
 
 ### M8 GitHub/npm beta 准备
 
@@ -359,7 +360,7 @@ M7 当前协议依据见 `docs/dsh-rc8-web-host-protocol-probe.md`，只读机�
 - 原始 `docs/evidence` 与本机运行 Contract 已完整移动到 ignored `.private-release-archive/2026-08-24/`，公开仓库只保留 `docs/validation-evidence-summary.md`；原始 evidence 没有被改写。
 - `pnpm run release:audit` 扫描 195 个公开候选路径并以 0 findings 通过；`release:snapshot` 已在仓库外生成 96 个实际文件的无历史快照，不包含私有归档。
 - release candidate 的 DSH rc.2 live compatibility probe 六项只读检查全部通过，未创建 Workspace/session、未发送 prompt。
-- M8 达到 6/6；干净 root commit `8d56ba6921188426bb679d9684a57a6deacaae51` 已推送 `main`，远端文件树为 96 个文件且不含私有目录。仓库 topics 已设置，Private Vulnerability Reporting 已启用。下一步只剩维护者单独授权的 npm `beta`、tag 与 GitHub Release。
+- M8 达到 8/8；npm `codex-dsh-bridge@0.1.0-beta.1` 已发布，`beta` 指向该版本，registry 安装 smoke 通过。GitHub tag/Release 与 Codex plugin scaffold 不属于本次首发收尾，留到 beta 观察期后决定。
 
 ## 项目价值与停止门槛
 

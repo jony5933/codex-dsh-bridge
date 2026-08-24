@@ -1,6 +1,6 @@
-# 0.1.0-beta.1 release notes 草案
+# 0.1.0-beta.1 release notes
 
-> 状态：待发布草案。尚未创建 GitHub release，也未执行 npm publish。
+> 状态：npm beta 已发布；尚未创建 GitHub tag/Release。
 
 ## 定位
 
@@ -43,10 +43,12 @@ Bridge 不安装 DSH。用户需要单独安装受支持版本并保持 `dsh web
 
 ## 验证摘要
 
-- 自动测试：93/93 通过。
+- 自动测试：94/94 通过。
 - 真实 Web Host smoke：session 正确归入 Workspace，已打开 UI 无需刷新即可看到运行与完成状态。
 - DSH rc.2 live compatibility probe：六项只读检查通过，未创建 session、未发送 prompt。
-- 隔离 npm tarball 安装：两个 binary、version、help、运行索引、Schema 与 Prompt 资源定位通过。
+- npm registry 隔离安装：两个 binary、version、help、运行索引、Schema 与 Prompt 资源定位通过。
+- npm integrity：`sha512-aYXDBPPGlns52ewgUsRQJuY7xxWMrxMi+tEPru2zW/Pj/R3/6R7qVvVjj2v7YraqxNktkgz+8/6uXOIRS7eYhw==`。
+- npm Public Registry 首发自动创建了 `latest`；当前仍应显式安装 `@beta`，该 `latest` 不代表稳定承诺。
 
 ## 升级与卸载
 

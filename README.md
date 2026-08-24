@@ -21,7 +21,7 @@ Bridge 提供两种模式：
 
 ## 安装
 
-当前仓库准备发布 `codex-dsh-bridge@0.1.0-beta.1`，但尚未执行 npm publish。正式发布 beta 后，推荐全局安装：
+`codex-dsh-bridge@0.1.0-beta.1` 已发布到 npm。推荐显式使用 `beta` channel 安装：
 
 ```bash
 npm install --global codex-dsh-bridge@beta
@@ -30,7 +30,7 @@ codex-dsh --version
 
 Bridge 不会代替用户安装或升级 DSH。使用前需要单独安装受支持的 `dsh`，并让 `dsh web` 在本机运行；当前已验证的 DSH 版本为 `0.1.0-rc.8`、`0.1.1-rc.1` 与 `0.1.1-rc.2`。Node.js 需要 `>=22.19`。
 
-若只在单个项目内使用，发布后也可以安装为开发依赖，并通过 `npx codex-dsh` 调用：
+若只在单个项目内使用，也可以安装为开发依赖，并通过 `npx codex-dsh` 调用：
 
 ```bash
 npm install --save-dev codex-dsh-bridge@beta

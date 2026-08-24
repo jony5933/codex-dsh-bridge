@@ -26,7 +26,7 @@ Bridge 每次执行 `web-run` 都会先运行只读 compatibility probe。未知
 
 ## npm 安装、更新与卸载
 
-项目尚未发布到 npm。以下命令从首次 GitHub beta/npm beta 发布后开始适用。
+`0.1.0-beta.1` 已发布到 npm。安装时应显式选择 `beta` channel。
 
 全局安装 beta：
 
@@ -58,13 +58,13 @@ npm uninstall --global codex-dsh-bridge
 
 卸载 package 不会卸载 DSH，也不会删除 `~/.dsh-bridge/runs`。该目录包含用户的 evidence 和不可变运行索引，只能由用户在确认保留策略后单独处理。
 
-beta 首发使用 `beta` dist-tag：
+beta 首发使用了 `beta` dist-tag：
 
 ```bash
 npm publish --tag beta
 ```
 
-这是 release checklist 中的待执行命令，不得在未获得维护者明确授权时运行。beta 稳定前不占用 `latest`。
+npm Public Registry 会在新包第一次发布时自动创建 `latest`，即使 publish 使用了其他 tag；registry 也拒绝删除唯一已发布版本的 `latest`。因此当前文档与自动化必须显式使用 `@beta`，不能把裸包名或当前 `latest` 解释为稳定版。
 
 ## 从源码运行
 
@@ -90,16 +90,17 @@ pnpm dev -- web-probe "/absolute/path/to/project"
 
 测试、真实运行 evidence、本地 Contract、源码与开发配置不进入 tarball。`prepack` 固定执行 `pnpm run check`。binary 必须指向实际构建路径 `dist/src/cli.js`，不能回退到不存在的 `dist/cli.js`。
 
-## 2026-08-24 本地验证证据
+## 2026-08-24 发布与验证证据
 
-- 当前 release-candidate `npm pack --dry-run --json` 通过：tarball 48,197 bytes，解包 198,449 bytes，共 62 个文件；MIT `LICENSE` 已包含。
-- 真实 tarball 安装到隔离目录后，`codex-dsh --version` 与 `deepseek-loop --version` 均输出 `0.1.0-beta.1`。
+- 最终 npm tarball 为 48,194 bytes，解包 198,445 bytes，共 62 个文件；MIT `LICENSE` 已包含。
+- SHA-512 integrity：`sha512-aYXDBPPGlns52ewgUsRQJuY7xxWMrxMi+tEPru2zW/Pj/R3/6R7qVvVjj2v7YraqxNktkgz+8/6uXOIRS7eYhw==`。
+- 从 npm registry 全新安装后，`codex-dsh --version` 与 `deepseek-loop --version` 均输出 `0.1.0-beta.1`。
 - 已安装 CLI 的空索引 `web-runs` 查询成功并返回 `count: 0`。
 - 已安装代码能定位 package 内 `contracts/review.schema.json` 与 `prompts/executor.md`。
-- 完整自动验证为 93/93 tests。
-- npm registry 查询 `codex-dsh-bridge` 当时返回 `E404`。这只代表查询时未发现同名 package，不能代替名称预留；正式发布前必须再次检查。
+- 完整自动验证为 94/94 tests。
+- npm `beta` dist-tag 指向 `0.1.0-beta.1`；registry metadata 保留两个 binary 映射。
 
-本次验证没有执行 npm publish、全局安装或修改用户的 DSH 安装。
+本次发布没有执行全局安装，也没有修改用户的 DSH 安装。
 
 ## 后续拆包门槛
 
