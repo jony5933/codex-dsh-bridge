@@ -13,8 +13,8 @@
     "url": "https://github.com/jony5933/codex-dsh-bridge/issues"
   },
   "bin": {
-    "codex-dsh": "./dist/src/cli.js",
-    "deepseek-loop": "./dist/src/cli.js"
+    "codex-dsh": "dist/src/cli.js",
+    "deepseek-loop": "dist/src/cli.js"
   },
   "files": [
     "dist/src/**/*.js",
