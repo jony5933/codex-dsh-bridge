@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.deepseek-loop/
+*.log
+.DS_Store
+.private-release-archive/

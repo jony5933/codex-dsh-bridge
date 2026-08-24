@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "taskId": "example-safe-change",
+  "repository": "/absolute/path/to/target-repository",
+  "baseCommit": "HEAD",
+  "objective": "Add input validation to the existing user registration endpoint.",
+  "allowedPaths": [
+    "src/auth/**",
+    "tests/auth/**"
+  ],
+  "forbiddenPaths": [
+    ".env*",
+    "migrations/**",
+    "package.json",
+    "pnpm-lock.yaml"
+  ],
+  "acceptanceCriteria": [
+    "Invalid email addresses are rejected with the existing error format.",
+    "Valid registration behavior remains unchanged.",
+    "Regression tests cover valid and invalid inputs."
+  ],
+  "requiredChecks": [
+    "pnpm test",
+    "pnpm typecheck"
+  ],
+  "instructions": "Make the smallest focused change. Do not commit or push.",
+  "harness": {
+    "command": "dsh",
+    "args": ["--profile", "headless", "{prompt}"],
+    "timeoutMs": 1800000
+  },
+  "execution": {
+    "keepWorktree": true
+  }
+}

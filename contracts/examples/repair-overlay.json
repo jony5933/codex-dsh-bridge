@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "taskId": "example-safe-change-repair-1",
+  "repair": {
+    "parentContract": "./safe-change.json",
+    "iteration": 1,
+    "findings": [
+      {
+        "id": "preserve-error-shape",
+        "severity": "P2",
+        "title": "保持既有错误响应结构",
+        "description": "当前实现改变了无效邮箱返回的错误对象结构，需要恢复原有 API Contract。"
+      }
+    ]
+  }
+}

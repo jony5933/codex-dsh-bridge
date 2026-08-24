@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deepseek-loop.local/contracts/direct-evidence.schema.json",
+  "title": "Direct-channel execution evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version", "kind", "runId", "taskId", "status", "repository", "baseCommit",
+    "worktree", "startedAt", "completedAt", "contractPath", "harness",
+    "baselineChecks", "checks", "acceptanceChecks", "boundary", "patchPath",
+    "evidencePath", "blockers", "failureReasons", "controls"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "kind": { "const": "direct-channel" },
+    "runId": { "type": "string", "minLength": 1 },
+    "taskId": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["passed", "failed", "blocked"] },
+    "repository": { "type": "string", "minLength": 1 },
+    "baseCommit": { "type": "string", "minLength": 1 },
+    "worktree": { "type": "string", "minLength": 1 },
+    "startedAt": { "type": "string", "minLength": 1 },
+    "completedAt": { "type": "string", "minLength": 1 },
+    "contractPath": { "type": "string", "minLength": 1 },
+    "harness": {
+      "type": ["object", "null"],
+      "properties": {
+        "exitCode": { "type": ["integer", "null"] },
+        "timedOut": { "type": "boolean" },
+        "durationMs": { "type": "number", "minimum": 0 },
+        "stdoutPath": { "type": "string", "minLength": 1 },
+        "stderrPath": { "type": "string", "minLength": 1 }
+      },
+      "required": ["exitCode", "timedOut", "durationMs", "stdoutPath", "stderrPath"]
+    },
+    "baselineChecks": { "$ref": "#/$defs/checks" },
+    "checks": { "$ref": "#/$defs/checks" },
+    "acceptanceChecks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "exitCode", "timedOut", "logPath"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "exitCode": { "type": ["integer", "null"] },
+          "timedOut": { "type": "boolean" },
+          "logPath": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["changedFiles", "allowedFiles", "violations", "verification"],
+      "properties": {
+        "changedFiles": { "type": "array", "items": { "type": "string" } },
+        "allowedFiles": { "type": "array", "items": { "type": "string" } },
+        "violations": { "type": "array", "items": { "type": "object" } },
+        "verification": { "const": "manual" }
+      }
+    },
+    "patchPath": { "type": ["string", "null"] },
+    "evidencePath": { "type": "string", "minLength": 1 },
+    "blockers": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "failureReasons": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["isolatedWorktree", "gitPolicy", "automatedChecks", "automatedBoundaryCheck"],
+      "properties": {
+        "isolatedWorktree": { "const": true },
+        "gitPolicy": { "const": false },
+        "automatedChecks": { "const": false },
+        "automatedBoundaryCheck": { "const": false }
+      }
+    }
+  },
+  "$defs": {
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["check", "exitCode", "timedOut", "logPath"],
+        "properties": {
+          "check": { "type": "string", "minLength": 1 },
+          "exitCode": { "type": ["integer", "null"] },
+          "timedOut": { "type": "boolean" },
+          "logPath": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "blocked" } }, "required": ["status"] },
+      "then": {
+        "properties": {
+          "harness": { "type": "null" }, "patchPath": { "type": "null" },
+          "blockers": { "minItems": 1 }, "failureReasons": { "maxItems": 0 }
+        }
+      },
+      "else": {
+        "properties": {
+          "harness": { "type": "object" }, "patchPath": { "type": "string", "minLength": 1 },
+          "blockers": { "maxItems": 0 }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "passed" } }, "required": ["status"] },
+      "then": { "properties": { "failureReasons": { "maxItems": 0 } } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "failed" } }, "required": ["status"] },
+      "then": { "properties": { "failureReasons": { "minItems": 1 } } }
+    }
+  ]
+}

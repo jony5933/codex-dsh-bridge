@@ -1,0 +1,61 @@
+{
+  "name": "codex-dsh-bridge",
+  "version": "0.1.0-beta.1",
+  "type": "module",
+  "description": "A visible, workspace-aware Codex to DeepSeek Harness Web Host bridge.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jony5933/codex-dsh-bridge.git"
+  },
+  "homepage": "https://github.com/jony5933/codex-dsh-bridge#readme",
+  "bugs": {
+    "url": "https://github.com/jony5933/codex-dsh-bridge/issues"
+  },
+  "bin": {
+    "codex-dsh": "./dist/src/cli.js",
+    "deepseek-loop": "./dist/src/cli.js"
+  },
+  "files": [
+    "dist/src/**/*.js",
+    "dist/src/**/*.d.ts",
+    "contracts/*.schema.json",
+    "prompts/*.md",
+    "README.md"
+  ],
+  "keywords": [
+    "codex",
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "web-host",
+    "bridge"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "pnpm run build && node dist/src/cli.js",
+    "test": "pnpm run build && node --test dist/tests/*.test.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "check": "pnpm run typecheck && pnpm run test && pnpm run build",
+    "prepack": "pnpm run check",
+    "release:audit": "node scripts/release-audit.mjs",
+    "release:snapshot": "node scripts/create-release-snapshot.mjs"
+  },
+  "dependencies": {
+    "ajv": "^8.17.1",
+    "picomatch": "^4.0.3",
+    "yaml": "^2.9.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.10.0",
+    "@types/picomatch": "^4.0.2",
+    "typescript": "^5.9.3"
+  },
+  "packageManager": "pnpm@11.10.0",
+  "engines": {
+    "node": ">=22.19"
+  }
+}

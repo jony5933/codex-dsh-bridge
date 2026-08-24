@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "runId": "example-safe-change-20260820000000000",
+  "taskId": "example-safe-change",
+  "status": "approved",
+  "summary": "Runner 检查与路径边界通过，未发现尚未解决的可执行问题。",
+  "findings": [],
+  "blockers": []
+}

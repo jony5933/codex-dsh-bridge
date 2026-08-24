@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.codex-deepseek-loop/review.schema.json",
+  "title": "Codex review artifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "runId",
+    "taskId",
+    "status",
+    "summary",
+    "findings",
+    "blockers"
+  ],
+  "properties": {
+    "version": { "type": "integer", "const": 1 },
+    "runId": { "type": "string", "minLength": 1 },
+    "taskId": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["approved", "changes-requested", "blocked"]
+    },
+    "summary": { "type": "string", "minLength": 1 },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "severity",
+          "title",
+          "file",
+          "startLine",
+          "endLine",
+          "evidence",
+          "minimalFix",
+          "resolution"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{1,63}$"
+          },
+          "severity": {
+            "type": "string",
+            "enum": ["P0", "P1", "P2", "P3"]
+          },
+          "title": { "type": "string", "minLength": 1 },
+          "file": { "type": "string", "minLength": 1 },
+          "startLine": { "type": ["integer", "null"] },
+          "endLine": { "type": ["integer", "null"] },
+          "evidence": { "type": "string", "minLength": 1 },
+          "minimalFix": { "type": "string", "minLength": 1 },
+          "resolution": {
+            "type": "string",
+            "enum": ["open", "resolved"]
+          }
+        }
+      }
+    },
+    "blockers": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    }
+  }
+}

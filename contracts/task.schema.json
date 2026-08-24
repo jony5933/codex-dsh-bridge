@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.codex-deepseek-loop/task.schema.json",
+  "title": "Codex to DeepSeek task contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "taskId",
+    "repository",
+    "objective",
+    "allowedPaths",
+    "acceptanceCriteria",
+    "requiredChecks"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "taskId": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{1,63}$"
+    },
+    "repository": { "type": "string", "minLength": 1 },
+    "baseCommit": { "type": "string", "minLength": 1, "default": "HEAD" },
+    "objective": { "type": "string", "minLength": 10 },
+    "allowedPaths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "forbiddenPaths": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 },
+      "default": []
+    },
+    "acceptanceCriteria": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 3 }
+    },
+    "requiredChecks": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "baselineChecks": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 },
+      "default": []
+    },
+    "acceptanceChecks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "runner", "script"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9._-]{1,63}$"
+          },
+          "runner": { "enum": ["node", "shell"] },
+          "script": { "type": "string", "minLength": 1 },
+          "args": {
+            "type": "array",
+            "items": { "type": "string" },
+            "default": []
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1000,
+            "maximum": 1800000,
+            "default": 900000
+          }
+        }
+      },
+      "default": []
+    },
+    "skills": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["names"],
+      "properties": {
+        "root": { "type": "string", "minLength": 1 },
+        "names": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+          }
+        },
+        "invocation": {
+          "enum": ["automatic", "explicit"],
+          "default": "automatic"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": { "names": { "minItems": 1 } },
+            "required": ["names"]
+          },
+          "then": { "required": ["root"] }
+        },
+        {
+          "if": {
+            "properties": { "names": { "maxItems": 0 } },
+            "required": ["names"]
+          },
+          "then": {
+            "properties": { "invocation": { "const": "automatic" } },
+            "not": { "required": ["root"] }
+          }
+        }
+      ]
+    },
+    "instructions": { "type": "string", "default": "" },
+    "harness": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "command": { "type": "string", "minLength": 1, "default": "dsh" },
+        "args": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["--profile", "headless", "{prompt}"]
+        },
+        "timeoutMs": {
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 7200000,
+          "default": 1800000
+        }
+      },
+      "default": {}
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "worktreeRoot": { "type": "string", "minLength": 1 },
+        "keepWorktree": { "const": true, "default": true }
+      },
+      "default": {}
+    }
+  }
+}

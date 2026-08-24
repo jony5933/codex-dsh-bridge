@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deepseek-loop.local/contracts/result.schema.json",
+  "title": "Runner Result",
+  "type": "object",
+  "required": [
+    "version",
+    "runId",
+    "taskId",
+    "status",
+    "repository",
+    "baseCommit",
+    "branch",
+    "worktree",
+    "startedAt",
+    "completedAt",
+    "harness",
+    "baselineChecks",
+    "checks",
+    "acceptanceChecks",
+    "skills",
+    "gitPolicy",
+    "boundary",
+    "patchPath",
+    "reportPath",
+    "blockers",
+    "failureReasons",
+    "lineage"
+  ],
+  "properties": {
+    "version": { "const": 1 },
+    "runId": { "type": "string", "minLength": 1 },
+    "taskId": { "type": "string", "minLength": 1 },
+    "status": { "enum": ["passed", "failed", "blocked"] },
+    "repository": { "type": "string", "minLength": 1 },
+    "baseCommit": { "type": "string", "minLength": 1 },
+    "branch": { "type": "string", "minLength": 1 },
+    "worktree": { "type": "string", "minLength": 1 },
+    "startedAt": { "type": "string", "minLength": 1 },
+    "completedAt": { "type": "string", "minLength": 1 },
+    "harness": { "type": ["object", "null"] },
+    "baselineChecks": { "type": "array", "items": { "type": "object" } },
+    "checks": { "type": "array", "items": { "type": "object" } },
+    "acceptanceChecks": { "type": "array", "items": { "type": "object" } },
+    "skills": { "type": ["object", "null"] },
+    "gitPolicy": { "type": ["object", "null"] },
+    "boundary": {
+      "type": "object",
+      "required": ["changedFiles", "allowedFiles", "violations"],
+      "properties": {
+        "changedFiles": { "type": "array", "items": { "type": "string" } },
+        "allowedFiles": { "type": "array", "items": { "type": "string" } },
+        "violations": { "type": "array", "items": { "type": "object" } }
+      }
+    },
+    "patchPath": { "type": ["string", "null"] },
+    "reportPath": { "type": "string", "minLength": 1 },
+    "blockers": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "failureReasons": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "lineage": { "type": "object" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "status": { "const": "blocked" } }, "required": ["status"] },
+      "then": {
+        "properties": {
+          "harness": { "type": "null" },
+          "checks": { "maxItems": 0 },
+          "acceptanceChecks": { "maxItems": 0 },
+          "skills": { "type": "null" },
+          "gitPolicy": { "type": "null" },
+          "boundary": {
+            "properties": {
+              "changedFiles": { "maxItems": 0 },
+              "allowedFiles": { "maxItems": 0 },
+              "violations": { "maxItems": 0 }
+            }
+          },
+          "patchPath": { "type": "null" },
+          "blockers": { "minItems": 1 },
+          "failureReasons": { "maxItems": 0 }
+        }
+      },
+      "else": {
+        "properties": {
+          "harness": { "type": "object" },
+          "skills": { "type": "object" },
+          "gitPolicy": { "type": "object" },
+          "patchPath": { "type": "string", "minLength": 1 },
+          "blockers": { "maxItems": 0 }
+        }
+      }
+    },
+    {
+      "if": { "properties": { "status": { "const": "passed" } }, "required": ["status"] },
+      "then": { "properties": { "failureReasons": { "maxItems": 0 } } }
+    },
+    {
+      "if": { "properties": { "status": { "const": "failed" } }, "required": ["status"] },
+      "then": { "properties": { "failureReasons": { "minItems": 1 } } }
+    }
+  ],
+  "additionalProperties": false
+}
